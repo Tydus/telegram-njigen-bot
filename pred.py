@@ -57,7 +57,7 @@ def predict(readable):
             cat = 3 if ret > 0 else 2
 
         except Exception, e:
-            print e.description
+            print e.message
 
         return cat, ret
 
