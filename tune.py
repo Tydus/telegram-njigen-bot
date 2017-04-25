@@ -5,9 +5,10 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras import optimizers
 from keras.models import Sequential
 from keras.layers import Dropout, Flatten, Dense
+from multiprocessing import cpu_count
 
-top_model_weights_path = 'bottleneck_fc_model.h5'
-new_top_model_weights_path = 'new_bottleneck_fc_model'
+full_model_weights_path = 'epoch_0.h5'
+tuned_full_model_weights_path = 'tuned_model'
 # dimensions of our images.
 img_width, img_height = 224, 224
 
@@ -28,13 +29,14 @@ top_model.add(Dense(256, activation='relu'))
 top_model.add(Dropout(0.5))
 top_model.add(Dense(1, activation='sigmoid'))
 
-top_model.load_weights(top_model_weights_path)
-
 # convert functional model to sequential, in order to use .add()
 model = Sequential(layers=model.layers)
 
 # add the model on top of the convolutional base
 model.add(top_model)
+
+# load full model weights
+model.save_weights(full_model_weights_path)
 
 for layer in model.layers[:14]:
     layer.trainable = False
@@ -68,20 +70,18 @@ validation_generator = test_datagen.flow_from_directory(
     batch_size=batch_size,
     class_mode='binary')
 
-import pdb
-#pdb.set_trace()
-
 for i in range(epochs):
-	# fine-tune the model
-	model.fit_generator(
-	    train_generator,
-            steps_per_epoch=nb_train_samples // batch_size,
-	    epochs=1,
-	    validation_data=validation_generator,
-            validation_steps=nb_validation_samples // batch_size,
-            max_q_size=100,
-            workers=4,
-            verbose=1,
-	)
+    # fine-tune the model
+    model.fit_generator(
+        train_generator,
+        steps_per_epoch=nb_train_samples // batch_size,
+        epochs=1,
+        validation_data=validation_generator,
+        validation_steps=nb_validation_samples // batch_size,
+        max_q_size=100,
+        workers=cpu_count(),
+        verbose=1,
+    )
 
-	model.save_weights(new_top_model_weights_path + "/epoch_%d.h5" % (i + 1))
+    # save every 1 epoch
+    model.save_weights(new_top_model_weights_path + "/epoch_%d.h5" % (i + 1))
