@@ -35,7 +35,7 @@ def save_bottlebeck_features():
         batch_size=batch_size,
         class_mode=None,
         shuffle=False,
-        )
+    )
     bottleneck_features_train = model.predict_generator(
         generator, nb_train_samples // batch_size)
     np.save(open('bottleneck_features_train.npy', 'w'),
@@ -47,7 +47,7 @@ def save_bottlebeck_features():
         batch_size=batch_size,
         class_mode=None,
         shuffle=False,
-        )
+    )
     bottleneck_features_validation = model.predict_generator(
         generator, nb_validation_samples // batch_size)
     np.save(open('bottleneck_features_validation.npy', 'w'),

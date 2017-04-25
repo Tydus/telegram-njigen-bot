@@ -30,9 +30,10 @@ top_model.add(Dense(1))
 
 top_model.load_weights(top_model_weights_path)
 
-# add the model on top of the convolutional base
-
+# convert functional model to sequential, in order to use .add()
 model = Sequential(layers=model.layers)
+
+# add the model on top of the convolutional base
 model.add(top_model)
 
 #model.summary()
