@@ -18,7 +18,7 @@ from telegram.ext.dispatcher import run_async
 
 t0 = time.time()
 from pred import predict
-print "Model prepared in %.2f s" % (time.time() - t0)
+print("Model prepared in %.2f s" % (time.time() - t0))
 
 http = urllib3.PoolManager()
 
@@ -82,7 +82,7 @@ def feedback(bot, update):
     m.edit_message_reply_markup(reply_markup=None)
 
 def error(bot, update, error):
-    print error
+    print(error)
 
 def main():
     updater = Updater(sys.argv[1])

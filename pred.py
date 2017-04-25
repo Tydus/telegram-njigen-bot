@@ -64,8 +64,8 @@ def predict(readable):
 
             cat = 3 if ret > 0 else 2
 
-        except Exception, e:
-            print e.message
+        except Exception as e:
+            print(e.message)
 
         return cat, ret
 
@@ -80,11 +80,11 @@ if __name__ == "__main__":
         if pred_cat == cat:
             hit += 1
 
-        print "%20s: %5s (S = %.4f)" % (
+        print("%20s: %5s (S = %.4f)" % (
             i,
             "Right" if cat == pred_cat else "Wrong",
             ret,
-        )
+        ))
 
-    print "[%d/%d] hit (%.3f%%)" % (hit, len(fn), 100. * hit / len(fn))
+    print("[%d/%d] hit (%.3f%%)" % (hit, len(fn), 100. * hit / len(fn)))
 
