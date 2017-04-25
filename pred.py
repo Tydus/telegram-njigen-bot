@@ -1,12 +1,20 @@
 #!/usr/bin/python
 
+from sys import argv
+
+if __name__ == "__main__":
+    if len(argv) < 3:
+        print("predict the images")
+        print("Usage:")
+        print("%s <2|3> [filenames] " % argv[0])
+        exit(-1)
+
 from time import time
 from keras import applications
 from keras.preprocessing import image
 from keras import optimizers
 from keras.models import Sequential, Model
 from keras.layers import Dropout, Flatten, Dense
-from sys import argv
 from keras.applications.vgg16 import preprocess_input
 import math
 import numpy as np
