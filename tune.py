@@ -7,7 +7,7 @@ from keras.models import Sequential
 from keras.layers import Dropout, Flatten, Dense
 
 top_model_weights_path = 'bottleneck_fc_model.h5'
-new_top_model_weights_path = 'new_bottleneck_fc_model.h5'
+new_top_model_weights_path = 'new_bottleneck_fc_model'
 # dimensions of our images.
 img_width, img_height = 224, 224
 
@@ -15,7 +15,7 @@ train_data_dir = 'train'
 validation_data_dir = 'eval'
 nb_train_samples = 10000
 nb_validation_samples = 2000
-epochs = 50
+epochs = 10
 batch_size = 50
 
 # build the VGG16 network
@@ -38,9 +38,6 @@ model.add(top_model)
 
 for layer in model.layers[:14]:
     layer.trainable = False
-
-import pdb
-pdb.set_trace()
 
 model.summary()
 
@@ -71,12 +68,20 @@ validation_generator = test_datagen.flow_from_directory(
     batch_size=batch_size,
     class_mode='binary')
 
-# fine-tune the model
-model.fit_generator(
-    train_generator,
-    samples_per_epoch=nb_train_samples,
-    epochs=epochs,
-    validation_data=validation_generator,
-    nb_val_samples=nb_validation_samples)
+import pdb
+#pdb.set_trace()
 
-model.save_weights(new_top_model_weights_path)
+for i in range(epochs):
+	# fine-tune the model
+	model.fit_generator(
+	    train_generator,
+            steps_per_epoch=nb_train_samples // batch_size,
+	    epochs=1,
+	    validation_data=validation_generator,
+            validation_steps=nb_validation_samples // batch_size,
+            max_q_size=100,
+            workers=4,
+            verbose=1,
+	)
+
+	model.save_weights(new_top_model_weights_path + "/epoch_%d.h5" % (i + 1))
