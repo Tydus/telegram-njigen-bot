@@ -14,7 +14,7 @@ import tensorflow as tf
 
 
 # path to the model weights files.
-top_model_weights_path = 'bottleneck_fc_model.h5'
+model_weights_path = 'full_model.h5'
 # dimensions of our images.
 img_width, img_height = 224, 224
 
@@ -28,14 +28,13 @@ top_model.add(Dense(256, activation='relu'))
 top_model.add(Dropout(0.5))
 top_model.add(Dense(1))
 
-top_model.load_weights(top_model_weights_path)
-
 # convert functional model to sequential, in order to use .add()
 model = Sequential(layers=model.layers)
 
 # add the model on top of the convolutional base
 model.add(top_model)
 
+model.load_weights(model_weights_path)
 #model.summary()
 
 
