@@ -84,4 +84,4 @@ for i in range(epochs):
     )
 
     # save every 1 epoch
-    model.save_weights(new_top_model_weights_path + "/epoch_%d.h5" % (i + 1))
+    model.save_weights(tuned_full_model_weights_path + "/epoch_%d.h5" % (i + 1))
