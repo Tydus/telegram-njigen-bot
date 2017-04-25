@@ -36,7 +36,7 @@ model = Sequential(layers=model.layers)
 model.add(top_model)
 
 # load full model weights
-model.save_weights(full_model_weights_path)
+model.load_weights(full_model_weights_path)
 
 for layer in model.layers[:14]:
     layer.trainable = False
